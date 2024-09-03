@@ -1,7 +1,11 @@
 <template>
-  <div class="view-a">我是A页面
-
-    <button @click="onGetCUstomUa">获取自定义ua</button>
+  <div class="view-a">
+    <!-- 我是A页面 -->
+    Page A
+    <button @click="onGetCUstomUa">
+      <!-- 获取自定义ua -->
+      Get customized customs UA
+    </button>
   </div>
 </template>
 

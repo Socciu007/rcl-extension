@@ -1,5 +1,8 @@
 <template>
-  <div class="view-b">我是B页面</div>
+  <div class="view-b">
+    <!-- 我是B页面 -->
+    Page B
+  </div>
 </template>
 
 <script>

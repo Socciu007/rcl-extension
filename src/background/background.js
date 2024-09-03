@@ -1,4 +1,7 @@
 const customUa = 'hello world ua'
+const targetUrl = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking';
+const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67';
+const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring';
 
 const onBeforeSendCallback = (details) => {
   for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -17,6 +20,7 @@ const onBeforeSendCallback = (details) => {
 }
 
 // 请求发现前监听
+// Chrome 扩展提供的一个事件，用于在发送HTTP请求之前触发
 const onBeforeSendHeadersListener = () => {
   chrome.webRequest.onBeforeSendHeaders.addListener(
     onBeforeSendCallback,
@@ -25,20 +29,118 @@ const onBeforeSendHeadersListener = () => {
   )
 }
 
+chrome.browserAction.onClicked.addListener(function() {
+  chrome.tabs.create({ url: targetUrl1 }, function(tab) {
+    // 新标签页已创建，content.js 将自动注入（基于 manifest.json 中的规则）
+  });
+});
+
+// 接收到数据并准备传输为eb
 const onRuntimeMessageListener = () => {
+  // 监听popup、background、content等发送的消息，允许不同部分之间进行通信和数据交换
   chrome.runtime.onMessage.addListener(function (msg, sender, callback) {
-    if (msg.type === 'getCustomUserAgent') {
-      console.log('background监听getCustomUserAgent事件')
-      callback({
-        customUa
-      });
+    console.log("msg!!!!!!!!!!!!!!!!!!!!", msg);
+    if (msg.action === "sendData") {
+      console.log('已经监听到了消息');
+      // 调用函数来处理数据
+      sendDataToExternalApi(msg.data);
+    }
+    const tabId = msg.tab.id;
+    if (msg.action === "bookingTwo") {
+      chrome.tabs.sendMessage(tabId, { action: "bookingTwo" });
+    } else if (msg.action === "bookingThree")  {
+      chrome.tabs.sendMessage(tabId, { action: "bookingThree" });
+    }
+    if (request.action === "submitComplete") {
+      console.log("Received submitComplete message:", request.data);
+      // 这里可以进行进一步处理，比如根据收到的数据修改扩展的行为
+      onTabsUpdateListener()
     }
   });
 }
 
+
+// 监听标签页更新 -----版本1
+const onTabsUpdateListener = () => {
+  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    console.log('页面有更新', changeInfo, tab);
+    if(changeInfo.status === 'complete' && tab.active) {
+      console.log(tab , tab.url , targetUrl2);
+       // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
+      if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面
+        chrome.tabs.sendMessage(tabId, { action: "login" })
+      } else if(tab && tab.url && tab.url.includes(targetUrl2)) {
+        // 点击第二个按钮
+        chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
+      }
+      if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
+        chrome.tabs.sendMessage(tabId, { action: "bookingOne" });
+      }
+    }
+  });
+};
+
+
+// 定时刷新当前激活的标签页----版本1
+function refreshActiveTab() {
+  // active: 当前处于活动状态（active）且位于当前窗口（currentWindow）
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    console.log('定时刷新页面', tabs);
+    if (tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl1)) {//判断是否为登录页面
+      console.log('这是登录页面,需进行登录操作');
+      chrome.tabs.sendMessage(tabs[0].id, { action: "login" });
+    } else if(tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl2)) {
+       // 发送消息到 content.js 来刷新页面
+      chrome.tabs.sendMessage(tabs[0].id, { action: "refreshPage" });
+    }
+  });
+
+}
+
+
+
+
+
+
+// // 将数据发送到外部接口
+async function sendDataToExternalApi(data) {
+  console.log('调用eb接口，将数据传输给eb');
+  const externalApiUrl = "https://www.dadaex.cn/api/seaOrder/rclyp"; // 替换为您的外部接口 URL
+  console.log('获取到了数据了', data);
+
+  try {
+    const response = await fetch(externalApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 如有必要，添加更多头部信息
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+    console.log("数据已成功发送到外部接口", responseData);
+  } catch (error) {
+    console.error("发送数据到外部接口时出错", error);
+  }
+}
+
+
+
+
+
+// 每30秒检查一次
+// setInterval(refreshActiveTab, 60000);
+
+
 const init = () => {
   onRuntimeMessageListener()
   onBeforeSendHeadersListener()
+  // onTabsUpdateListener() // 初始化标签页更新监听
 }
 
 init()
