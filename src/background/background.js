@@ -97,12 +97,7 @@ function refreshActiveTab() {
 
 }
 
-
-
-
-
-
-// // 将数据发送到外部接口
+// 将数据发送到外部接口/Send the data to the external interface
 async function sendDataToExternalApi(data) {
   console.log('调用eb接口，将数据传输给eb');
   const externalApiUrl = "https://www.dadaex.cn/api/seaOrder/rclyp"; // 替换为您的外部接口 URL

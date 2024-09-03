@@ -191,7 +191,7 @@ export default {
   color: #2c3e50;
 
   width: 375px;
-  height: 200px;
+  height: fit-content;
   padding: 15px;
   box-sizing: border-box;
 
@@ -207,11 +207,21 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 5px;
 
     .app-tab-item{
       font-size: 16px;
       color: coral;
       cursor: pointer;
+    }
+  }
+
+  .popup-container {
+    .input-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      height: 28px;
     }
   }
 }
