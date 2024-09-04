@@ -2,7 +2,7 @@
   <div class="view-a">
     <!-- 我是A页面 -->
     Page A
-    <button @click="onGetCUstomUa">
+    <button @click="onGetCustomUa">
       <!-- 获取自定义ua -->
       Get customized customs UA
     </button>
@@ -13,7 +13,7 @@
 export default {
   name: 'viewA',
   methods: {
-    onGetCUstomUa () {
+    onGetCustomUa () {
       chrome.runtime.sendMessage({type: 'getCustomUserAgent'}, function(response) {
         alert(JSON.stringify(response))
       })

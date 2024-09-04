@@ -11,221 +11,221 @@ function setScript({ code = '', needRemove = true } = params) {
 	needRemove && parentNode.removeChild(script)
 }
 
-let globalData  = {"AAA": "123"}
-// let globalData = {
-//   id: 150,
-//   userId: null,
-//   ebNo: 'FYJK000020-150',
-//   type: false,
-//   self: false,
-//   spell: false,
-//   startPort: 599,
-//   uploadPort: 3108,
-//   purposePort: 3108,
-//   shipCompany: 9,
-//   sailingTime: '2023-11-17',
-//   putType: 0,
-//   declare: '',
-//   interior: false,
-//   trailer: false,
-//   trailerTime: null,
-//   custom: false,
-//   entrustNub: '',
-//   ladingCount: 0,
-//   ladingNub: '',
-//   blNo: '1345',
-//   blNoTsl: '11111',
-//   putCode: '',
-//   freightTerms: false,
-//   transportTerms: '',
-//   appointNub: '',
-//   matchTaime: '',
-//   shipName: 'MMB 2402W',
-//   voyage: 'RFM3',
-//   portVoyage: '',
-//   bindingNotice: '',
-//   startPortTime: '',
-//   stopPortTime: '',
-//   inPortCode: '',
-//   overTime: '',
-//   stopPassTime: '',
-//   main: true,
-//   tdRemark: null,
-//   shipAgency: 'COSCO',
-//   leak: 0,
-//   canPut: 0,
-//   startPortalias: null,
-//   purposePortalias: null,
-//   uploadPortalias: null,
-//   trailerAddress: '',
-//   tetd: '',
-//   vgmendTime: '',
-//   addspell: null,
-//   qy: 0,
-//   dcstatus: 0,
-//   tdstatus: 0,
-//   cdstatus: 0,
-//   vdstatus: 0,
-//   cdreceipt: null,
-//   ebId: 0,
-//   receiptRemark: null,
-//   endPortPierId: null,
-//   xhxxStatus: 0,
-//   mentionCon: null,
-//   managelcl: false,
-//   outside: 2,
-//   icn: null,
-//   warehouseName: null,
-//   realityLeavePortTime: null,
-//   realityClosePortTime: null,
-//   exportBoxStartTime: null,
-//   isf5: '0',
-//   emptyId: null,
-//   acidNumber: null,
-//   vatNumber: null,
-//   egyptAcidNumber: null,
-//   createTime: '2023-11-16T09:00:07.000Z',
-//   updateTime: '2024-03-04T05:43:09.000Z',
-//   routeId: null,
-//   containner_vgms: [
-//     {
-//       cType: 0,
-//       boxNub: 'TEST1111233',
-//       weight: '0.000',
-//       volume: '0.000',
-//       sealNUb: '',
-//       amount: 10,
-//       hostMark: true,
-//       method: false
-//     }
-//   ],
-//   sea_order_bind: { routeId: 0, routeCode: 'SKT' },
-//   sea_order_contacts: [
-//     {
-//       id: 181523,
-//       oid: 150,
-//       cabinId: 0,
-//       lclid: 0,
-//       type: 2,
-//       master: 'SAME AS CONSIGNEE',
-//       address: '',
-//       firmCode: null,
-//       country: null,
-//       phone: null,
-//       aeo: null,
-//       spName: null,
-//       spType: null,
-//       spContact: null,
-//       qy: 0,
-//       createTime: '2023-11-16T09:00:07.000Z',
-//       updateTime: '2024-03-04T05:43:09.000Z'
-//     },
-//     {
-//       id: 181522,
-//       oid: 150,
-//       cabinId: 0,
-//       lclid: 0,
-//       type: true,
-//       master: 'ASAHI AUTO SPARE PARTS L.L.C',
-//       address: 'SHOP NO 18, NAIF 7 STATES BLDG, \n' +
-//         'BEHIND KHANSAHEB PARKING, DIERA \n' +
-//         'DUBAI,UNITED ARAB EMIRATES',
-//       firmCode: null,
-//       country: null,
-//       phone: null,
-//       aeo: null,
-//       spName: null,
-//       spType: null,
-//       spContact: null,
-//       qy: 0,
-//       createTime: '2023-11-16T09:00:07.000Z',
-//       updateTime: '2024-03-04T05:43:09.000Z'
-//     },
-//     {
-//       id: 181521,
-//       oid: 150,
-//       cabinId: 0,
-//       lclid: 0,
-//       type: false,
-//       master: 'YANCHENG RELY IMPORT & EXPORT \nCORP., LTD.',
-//       address: 'RM.401 TOWER #16,ZHONG YIN HAIHUA \n' +
-//         'PLAZA NO.59,JIANJUN\n' +
-//         'RD.,YANCHENG,CHINA',
-//       firmCode: null,
-//       country: null,
-//       phone: null,
-//       aeo: null,
-//       spName: null,
-//       spType: null,
-//       spContact: null,
-//       qy: 0,
-//       createTime: '2023-11-16T09:00:07.000Z',
-//       updateTime: '2024-03-04T05:43:09.000Z'
-//     }
-//   ],
-//   goods: [
-//     {
-//       id: 306,
-//       oid: 150,
-//       cabinId: 0,
-//       lclid: 0,
-//       shantou: null,
-//       name: 'TEST!!!',
-//       description: '你好',
-//       cargoType: false,
-//       amount: '10.000',
-//       unit: 'BAGS',
-//       weight: '2000.000',
-//       volume: '1111.000',
-//       hscode: '160413',
-//       dangerClass: null,
-//       unNub: null,
-//       dangerCode: null,
-//       dangerPoint: '0',
-//       packType: null,
-//       packDesc: null,
-//       packWeight: null,
-//       packSize: null,
-//       grossWeight: null,
-//       quarantineCode: null,
-//       quarantineName: null,
-//       sign: null,
-//       qy: 0,
-//       conid: null,
-//       createTime: '2023-11-16T09:00:07.000Z',
-//       updateTime: '2024-03-04T05:43:09.000Z'
-//     }
-//   ],
-//   startPortData: { id: 599, name: '上海', nameEn: 'SHANGHAI', code: 'CNSHA' },
-//   purposePortData: { id: 3108, name: '新加坡', nameEn: 'SINGAPORE', code: 'SGSIN' },
-//   uploadPortsea: { id: 3108, name: '新加坡', nameEn: 'SINGAPORE', code: 'SGSIN' },
-//   carrier: {
-//     id: 9,
-//     code: 'COSCO',
-//     name: '中远',
-//     nameEn: 'COSCO',
-//     scacCode: 'COSU'
-//   }
-// }
+// let globalData  = {"AAA": "123"}
+let globalData = {
+  id: 150,
+  userId: null,
+  ebNo: 'FYJK000020-150',
+  type: false,
+  self: false,
+  spell: false,
+  startPort: 599,
+  uploadPort: 3108,
+  purposePort: 3108,
+  shipCompany: 9,
+  sailingTime: '2023-11-17',
+  putType: 0,
+  declare: '',
+  interior: false,
+  trailer: false,
+  trailerTime: null,
+  custom: false,
+  entrustNub: '',
+  ladingCount: 0,
+  ladingNub: '',
+  blNo: '1345',
+  blNoTsl: '11111',
+  putCode: '',
+  freightTerms: false,
+  transportTerms: '',
+  appointNub: '',
+  matchTaime: '',
+  shipName: 'MMB 2402W',
+  voyage: 'RFM3',
+  portVoyage: '',
+  bindingNotice: '',
+  startPortTime: '',
+  stopPortTime: '',
+  inPortCode: '',
+  overTime: '',
+  stopPassTime: '',
+  main: true,
+  tdRemark: null,
+  shipAgency: 'COSCO',
+  leak: 0,
+  canPut: 0,
+  startPortalias: null,
+  purposePortalias: null,
+  uploadPortalias: null,
+  trailerAddress: '',
+  tetd: '',
+  vgmendTime: '',
+  addspell: null,
+  qy: 0,
+  dcstatus: 0,
+  tdstatus: 0,
+  cdstatus: 0,
+  vdstatus: 0,
+  cdreceipt: null,
+  ebId: 0,
+  receiptRemark: null,
+  endPortPierId: null,
+  xhxxStatus: 0,
+  mentionCon: null,
+  managelcl: false,
+  outside: 2,
+  icn: null,
+  warehouseName: null,
+  realityLeavePortTime: null,
+  realityClosePortTime: null,
+  exportBoxStartTime: null,
+  isf5: '0',
+  emptyId: null,
+  acidNumber: null,
+  vatNumber: null,
+  egyptAcidNumber: null,
+  createTime: '2023-11-16T09:00:07.000Z',
+  updateTime: '2024-03-04T05:43:09.000Z',
+  routeId: null,
+  containner_vgms: [
+    {
+      cType: 0,
+      boxNub: 'TEST1111233',
+      weight: '0.000',
+      volume: '0.000',
+      sealNUb: '',
+      amount: 10,
+      hostMark: true,
+      method: false
+    }
+  ],
+  sea_order_bind: { routeId: 0, routeCode: 'SKT' },
+  sea_order_contacts: [
+    {
+      id: 181523,
+      oid: 150,
+      cabinId: 0,
+      lclid: 0,
+      type: 2,
+      master: 'SAME AS CONSIGNEE',
+      address: '',
+      firmCode: null,
+      country: null,
+      phone: null,
+      aeo: null,
+      spName: null,
+      spType: null,
+      spContact: null,
+      qy: 0,
+      createTime: '2023-11-16T09:00:07.000Z',
+      updateTime: '2024-03-04T05:43:09.000Z'
+    },
+    {
+      id: 181522,
+      oid: 150,
+      cabinId: 0,
+      lclid: 0,
+      type: true,
+      master: 'ASAHI AUTO SPARE PARTS L.L.C',
+      address: 'SHOP NO 18, NAIF 7 STATES BLDG, \n' +
+        'BEHIND KHANSAHEB PARKING, DIERA \n' +
+        'DUBAI,UNITED ARAB EMIRATES',
+      firmCode: null,
+      country: null,
+      phone: null,
+      aeo: null,
+      spName: null,
+      spType: null,
+      spContact: null,
+      qy: 0,
+      createTime: '2023-11-16T09:00:07.000Z',
+      updateTime: '2024-03-04T05:43:09.000Z'
+    },
+    {
+      id: 181521,
+      oid: 150,
+      cabinId: 0,
+      lclid: 0,
+      type: false,
+      master: 'YANCHENG RELY IMPORT & EXPORT \nCORP., LTD.',
+      address: 'RM.401 TOWER #16,ZHONG YIN HAIHUA \n' +
+        'PLAZA NO.59,JIANJUN\n' +
+        'RD.,YANCHENG,CHINA',
+      firmCode: null,
+      country: null,
+      phone: null,
+      aeo: null,
+      spName: null,
+      spType: null,
+      spContact: null,
+      qy: 0,
+      createTime: '2023-11-16T09:00:07.000Z',
+      updateTime: '2024-03-04T05:43:09.000Z'
+    }
+  ],
+  goods: [
+    {
+      id: 306,
+      oid: 150,
+      cabinId: 0,
+      lclid: 0,
+      shantou: null,
+      name: 'TEST!!!',
+      description: '你好',
+      cargoType: false,
+      amount: '10.000',
+      unit: 'BAGS',
+      weight: '2000.000',
+      volume: '1111.000',
+      hscode: '160413',
+      dangerClass: null,
+      unNub: null,
+      dangerCode: null,
+      dangerPoint: '0',
+      packType: null,
+      packDesc: null,
+      packWeight: null,
+      packSize: null,
+      grossWeight: null,
+      quarantineCode: null,
+      quarantineName: null,
+      sign: null,
+      qy: 0,
+      conid: null,
+      createTime: '2023-11-16T09:00:07.000Z',
+      updateTime: '2024-03-04T05:43:09.000Z'
+    }
+  ],
+  startPortData: { id: 599, name: '上海', nameEn: 'SHANGHAI', code: 'CNSHA' },
+  purposePortData: { id: 3108, name: '新加坡', nameEn: 'SINGAPORE', code: 'SGSIN' },
+  uploadPortsea: { id: 3108, name: '新加坡', nameEn: 'SINGAPORE', code: 'SGSIN' },
+  carrier: {
+    id: 9,
+    code: 'COSCO',
+    name: '中远',
+    nameEn: 'COSCO',
+    scacCode: 'COSU'
+  }
+}
 
 const boxMapping =[
-      "20GP", // 0
-      "40GP",
-      "40HC",
-      "20FR",
-      "40FR", // 4
-      "20RF",
-      "40RF", // 6
-      "20OT",
-      "40OT",
-      "40OH", // 9
-      "20TK",
-      "40TK",
-      "20HT",
-      "40HT", // 13
-      "45HC",
-      "20GD",
-      "40GD"
+  "20GP", // 0
+  "40GP",
+  "40HC",
+  "20FR",
+  "40FR", // 4
+  "20RF",
+  "40RF", // 6
+  "20OT",
+  "40OT",
+  "40OH", // 9
+  "20TK",
+  "40TK",
+  "20HT",
+  "40HT", // 13
+  "45HC",
+  "20GD",
+  "40GD"
 ];
 
 setScript({
@@ -235,7 +235,7 @@ setScript({
 
 // 监听页面是否完毕，完毕后 点击第一个按钮 自动触发------版本1
 document.addEventListener('DOMContentLoaded', function () {
-  console.log("页面新增完成");
+  console.log("Added new page");
   const element = document.querySelector('div.tab_nav_selc a:nth-child(2)');
   if (element) {
     const element2 = element.querySelector('li');
@@ -245,9 +245,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
-
-
-
 
 chrome.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
   console.log('Message received from App.vue:', request);
@@ -298,7 +295,6 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
     //   }
     // }
 	}
-
 	if (request.action === "tabUpdated") {
 		console.log('点击第二个按钮');
 		const element = document.querySelector("#section1 > div.row > div.col-lg-2.px-0 > div > ul > a:nth-child(2) > li > div > div.col-10")
@@ -312,8 +308,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
     }
     }, 500);
 	}
-
-	//填入数据 頁面1
+	//填入数据 頁面1 (Scrape data in page 1)
   if(request.action === "bookingOne") {
     const element = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.first_section.currentSection > div > div > div:nth-child(5) > div > div:nth-child(4) > div.col-lg-7 > div")
     element.click()
@@ -358,22 +353,20 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
         const buttonHs = document.querySelector("#grossWeight0")
         buttonHs.value = globalData['goods'][0]['weight']
         setTimeout(() => {
-          const next1 = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.second_section.currentSection > div.row > div.col-lg-8.shippingDetailsRes > div.sub > div.btn_ctn_ttn2.next-button")
+          const next1 = document.querySelector(".btn_ctn_ttn2.next-button")
           next1.click()
         }, 500);
       }
     }, 1000);
   }
-
   if(request.action === "checkPageContent") {
     if(document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.third_section.currentSection > div > div.col-lg-8.mobRes > div.head_part_sec")) {
       chrome.runtime.sendMessage({ action: "bookingTwo" });
     } else {
       chrome.runtime.sendMessage({ action: "bookingThree" });
-
     }
   }
-  // 填入 页面2
+  // 填入 页面2 (Scrape data in page 2)
   if(request.action === "bookingTwo") {
     console.log("进入该页面一次");
     const parentNodes = document.querySelectorAll('.container_title');
@@ -394,8 +387,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender, sendRespons
     const next2 = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.third_section.currentSection > div > div.col-lg-8.mobRes > div.clas_sec_tel > div.row > div.col-md-4.sub > div.btn_ctn_ttn2.next-button")
     next2.click()
   }
-
-  // 填入 页面3
+  // 填入 页面3 (Scrape data in page 3)
   if(request.action === "bookingThree") {
     console.log("进入3");
     // 发货人填写
@@ -451,7 +443,6 @@ async function selectOption(select2ContainerId, resultsContainerId, value) {
   }
 }
 
-
 function postForm() {
 	// 创建一个新的 HTML 表单元素
 	var form = document.createElement('form');
@@ -481,7 +472,7 @@ function postForm() {
 	form.submit();
 }
 
-// 页面加载完成后的操作
+// 页面加载完成后的操作 (The action after the page is loaded)
 window.onload = function() {
 	// 执行数据获取函数
 
@@ -489,7 +480,6 @@ window.onload = function() {
   // clickTargetNode()
 
 };
-
 
 async function fetchData() {
 	const url = `${'http://localhost:3001/cargosmart/edi/booking'}?${id}`
@@ -534,7 +524,6 @@ function clickTargetNode() {
         console.log('未找到目标节点');
     }
 }
-
 
 async function login() {
 	const userNameDom = document.getElementById('username')

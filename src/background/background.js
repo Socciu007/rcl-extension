@@ -1,7 +1,7 @@
 const customUa = 'hello world ua'
 const targetUrl = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking';
-const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67';
-const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring';
+const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67'; //Url login page
+const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring'; // Url root page (refresh page)
 
 const onBeforeSendCallback = (details) => {
   for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -19,8 +19,8 @@ const onBeforeSendCallback = (details) => {
   return { requestHeaders: details.requestHeaders };
 }
 
-// 请求发现前监听
-// Chrome 扩展提供的一个事件，用于在发送HTTP请求之前触发
+// 请求发现前监听 (Request discovery)
+// Chrome 扩展提供的一个事件，用于在发送HTTP请求之前触发 (Event provided by Chrome extension is triggered before sending HTTP request)
 const onBeforeSendHeadersListener = () => {
   chrome.webRequest.onBeforeSendHeaders.addListener(
     onBeforeSendCallback,
@@ -29,13 +29,13 @@ const onBeforeSendHeadersListener = () => {
   )
 }
 
-chrome.browserAction.onClicked.addListener(function() {
-  chrome.tabs.create({ url: targetUrl1 }, function(tab) {
+chrome.browserAction.onClicked.addListener(function () {
+  chrome.tabs.create({ url: targetUrl1 }, function (tab) {
     // 新标签页已创建，content.js 将自动注入（基于 manifest.json 中的规则）
   });
 });
 
-// 接收到数据并准备传输为eb
+// 接收到数据并准备传输为eb (Receive data and prepare transmission to EB)
 const onRuntimeMessageListener = () => {
   // 监听popup、background、content等发送的消息，允许不同部分之间进行通信和数据交换
   chrome.runtime.onMessage.addListener(function (msg, sender, callback) {
@@ -48,7 +48,7 @@ const onRuntimeMessageListener = () => {
     const tabId = msg.tab.id;
     if (msg.action === "bookingTwo") {
       chrome.tabs.sendMessage(tabId, { action: "bookingTwo" });
-    } else if (msg.action === "bookingThree")  {
+    } else if (msg.action === "bookingThree") {
       chrome.tabs.sendMessage(tabId, { action: "bookingThree" });
     }
     if (request.action === "submitComplete") {
@@ -59,18 +59,18 @@ const onRuntimeMessageListener = () => {
   });
 }
 
-
-// 监听标签页更新 -----版本1
+// 监听标签页更新 -----版本1 (Update supervision tab - ver 1)
 const onTabsUpdateListener = () => {
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    console.log('页面有更新', changeInfo, tab);
-    if(changeInfo.status === 'complete' && tab.active) {
-      console.log(tab , tab.url , targetUrl2);
-       // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
-      if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面
+    console.log('Page update', changeInfo, tab);
+    if (changeInfo.status === 'complete' && tab.active) {
+      console.log(tab, tab.url, targetUrl2);
+      // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
+      // When the tab page is loaded and is activated, send a msg to Content.js
+      if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面 (Check login page)
         chrome.tabs.sendMessage(tabId, { action: "login" })
-      } else if(tab && tab.url && tab.url.includes(targetUrl2)) {
-        // 点击第二个按钮
+      } else if (tab && tab.url && tab.url.includes(targetUrl2)) {
+        // 点击第二个按钮 (Click the second button)
         chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
@@ -80,24 +80,22 @@ const onTabsUpdateListener = () => {
   });
 };
 
-
-// 定时刷新当前激活的标签页----版本1
+// 定时刷新当前激活的标签页----版本1 (Refresh the current actived tab - page version 1)
 function refreshActiveTab() {
   // active: 当前处于活动状态（active）且位于当前窗口（currentWindow）
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    console.log('定时刷新页面', tabs);
-    if (tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl1)) {//判断是否为登录页面
-      console.log('这是登录页面,需进行登录操作');
+    console.log('Refresh page', tabs);
+    if (tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl1)) {//判断是否为登录页面 (Check login page)
+      console.log('This is the login page, you need to take actions for login');
       chrome.tabs.sendMessage(tabs[0].id, { action: "login" });
-    } else if(tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl2)) {
-       // 发送消息到 content.js 来刷新页面
+    } else if (tabs.length && tabs[0].url && tabs[0].url.includes(targetUrl2)) {
+      // 发送消息到 content.js 来刷新页面 (Send msg to Content.js to refresh the page)
       chrome.tabs.sendMessage(tabs[0].id, { action: "refreshPage" });
     }
   });
-
 }
 
-// 将数据发送到外部接口/Send the data to the external interface
+// 将数据发送到外部接口 (Send the data to the external interface)
 async function sendDataToExternalApi(data) {
   console.log('调用eb接口，将数据传输给eb');
   const externalApiUrl = "https://www.dadaex.cn/api/seaOrder/rclyp"; // 替换为您的外部接口 URL
@@ -124,18 +122,13 @@ async function sendDataToExternalApi(data) {
   }
 }
 
-
-
-
-
 // 每30秒检查一次
-// setInterval(refreshActiveTab, 60000);
-
+setInterval(refreshActiveTab, 30000);
 
 const init = () => {
-  onRuntimeMessageListener()
-  onBeforeSendHeadersListener()
-  // onTabsUpdateListener() // 初始化标签页更新监听
+  onRuntimeMessageListener();
+  onBeforeSendHeadersListener();
+  onTabsUpdateListener(); // 初始化标签页更新监听
 }
 
 init()

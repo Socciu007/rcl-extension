@@ -24,18 +24,27 @@
         <button @click="handleSubmit">Submit</button>
         <!-- openSiteAndCheck -->
       </div>
-      <!-- 添加一个按钮用于触发 clickButtonOnPage 方法 -->
-      <!-- <button class="action-button" @click="clickButtonOnPage('#myButtonSelector')">点击页面按钮</button> -->
-      <!-- <button @click="triggerContentScript">触发页面操作</button>
-    <button @click="triggerAction">开始监听</button> -->
-
+      <!-- 添加一个按钮用于触发 clickButtonOnPage 方法 (Add a button to trigger) -->
+      <div class="btn-trigger-container">
+        <button class="action-button" @click="clickButtonOnPage('#myButtonSelector')">
+          <!-- 点击页面按钮 -->
+          Click Button on Page
+        </button>
+        <button @click="triggerContentScript">
+          <!-- 触发页面操作 -->
+          Trigger Active Page
+        </button>
+        <button @click="triggerAction">
+          <!-- 开始监听 -->
+          Trigger Action
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-
 
 export default {
   name: 'App',
@@ -117,33 +126,29 @@ export default {
         chrome.tabs.sendMessage(tabs[0].id, {action: "triggerOnClickEvent"});
       });
     },
-
-
     triggerAction() {
-      // 发送消息到 background.js
+      // 发送消息到 background.js (Send to mesage to background.js)
       chrome.runtime.sendMessage({ action: 'startAutoRefresh' });
     },
-
     async openSiteAndCheck() {
-      // 指定要检查的网站 URL
+      // 指定要检查的网站 URL (Specify the URL you want to check)
       const siteUrl = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67';
-      // const siteUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/eBookingService'
-      // const siteUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking'
-      // 查询所有标签页，查找是否已经打开了指定的 URL
+      const siteUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/eBookingService'
+      const siteUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking'
+      
+      // 查询所有标签页，查找是否已经打开了指定的 URL (Check all tab pages to find whether the specified URL has been opened)
       // eslint-disable-next-line no-undef
       chrome.tabs.query({}, async (tabs) => {
         let siteTab = tabs.find(tab => tab.url && tab.url.includes(siteUrl));
-        // let siteTab1 = tabs.find(tab => tab.url && tab.url.includes(siteUrl1));
-        // let siteTab2 = tabs.find(tab => tab.url && tab.url.includes(siteUrl2));
-        if(siteTab) {
+        let siteTab1 = tabs.find(tab => tab.url && tab.url.includes(siteUrl1));
+        let siteTab2 = tabs.find(tab => tab.url && tab.url.includes(siteUrl2));
+
+        if (siteTab || siteTab1 || siteTab2) {
           // 如果找到了，切换到该标签页
           // eslint-disable-next-line no-undef
           chrome.tabs.update(siteTab.id, { active: true }, async () => {
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-              chrome.tabs.sendMessage(
-                tabs[0].id,
-                { action: "firstPage"},
-              );
+              chrome.tabs.sendMessage( tabs[0].id, { action: "firstPage"});
             });
           });
           this.siteOpened = true; // 更新状态为已打开
@@ -154,10 +159,7 @@ export default {
             if(tab) {
               this.siteOpened = true; // 更新状态为已打开、
               chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                chrome.tabs.sendMessage(
-                  tabs[0].id,
-                  { action: "firstPage" },
-                );
+                chrome.tabs.sendMessage(tabs[0].id, { action: "firstPage" });
               });
             } else {
               this.siteOpened = false; // 如果有错误，保持状态为未打开
@@ -167,9 +169,7 @@ export default {
       });
     },
     onToView (name) {
-      this.$router.push({
-        name
-      })
+      this.$router.push({name})
     }
   },
   create() {
@@ -222,6 +222,17 @@ export default {
       justify-content: center;
       gap: 8px;
       height: 28px;
+    }
+    .btn-trigger-container {
+      display: flex;
+      justify-content: center;
+      height: 40px;
+      margin-top: 8px;
+      gap: 8px;
+      cursor: pointer;
+      button {
+        width: 120px;
+      }
     }
   }
 }
