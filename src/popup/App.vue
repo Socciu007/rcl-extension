@@ -25,20 +25,20 @@
         <!-- openSiteAndCheck -->
       </div>
       <!-- 添加一个按钮用于触发 clickButtonOnPage 方法 (Add a button to trigger) -->
-      <div class="btn-trigger-container">
+      <!-- <div class="btn-trigger-container">
         <button class="action-button" @click="clickButtonOnPage('#myButtonSelector')">
-          <!-- 点击页面按钮 -->
+          <-- 点击页面按钮 
           Click Button on Page
         </button>
         <button @click="triggerContentScript">
-          <!-- 触发页面操作 -->
+          <-- 触发页面操作
           Trigger Active Page
         </button>
         <button @click="triggerAction">
-          <!-- 开始监听 -->
+          <-- 开始监听 
           Trigger Action
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -64,20 +64,21 @@ export default {
       const data = { 'ebNo': this.inputValue };
       try {
         const response = await axios({
-          url: "http://localhost:3001/cargosmart/edi/seaOrder",
-          method: "POST",
+          // url: "http://localhost:3001/cargosmart/edi/seaOrder",
+          url: "http://localhost:3000/moneyapi/getOnefreight",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
           data: JSON.stringify(data),
         });
         // 发送到content.js
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.tabs.sendMessage(
-            tabs[0].id,
-            { action: "submitComplete", data: response.data },
-          );
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, { action: "login", data: response.data.data });
         });
+
+        // Sent msg to background.js to init automation page
+        chrome.runtime.sendMessage({ action: 'startAuto' });
         return response.data;  // 返回数据用于进一步处理
       } catch (error) {
         console.error("Error during submission:", error);  // 打印错误信息
@@ -148,7 +149,8 @@ export default {
           // eslint-disable-next-line no-undef
           chrome.tabs.update(siteTab.id, { active: true }, async () => {
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-              chrome.tabs.sendMessage( tabs[0].id, { action: "firstPage"});
+              console.log(siteTab.id, tabs);
+              chrome.tabs.sendMessage(tabs[0].id, { action: "firstPage"});
             });
           });
           this.siteOpened = true; // 更新状态为已打开

@@ -38,43 +38,48 @@ chrome.browserAction.onClicked.addListener(function () {
 // 接收到数据并准备传输为eb (Receive data and prepare transmission to EB)
 const onRuntimeMessageListener = () => {
   // 监听popup、background、content等发送的消息，允许不同部分之间进行通信和数据交换
-  chrome.runtime.onMessage.addListener(function (msg, sender, callback) {
-    console.log("msg!!!!!!!!!!!!!!!!!!!!", msg);
+  chrome.runtime.onMessage.addListener(async function (msg, sender, callback) {
+    console.log("msg!!!", msg);
     if (msg.action === "sendData") {
       console.log('已经监听到了消息');
       // 调用函数来处理数据
-      sendDataToExternalApi(msg.data);
+      await sendDataToExternalApi(msg.data);
     }
-    const tabId = msg.tab.id;
+    // const tabId = msg.tabId;
     if (msg.action === "bookingTwo") {
-      chrome.tabs.sendMessage(tabId, { action: "bookingTwo" });
+      chrome.tabs.sendMessage(msg.tabId, { action: "bookingTwo" });
     } else if (msg.action === "bookingThree") {
-      chrome.tabs.sendMessage(tabId, { action: "bookingThree" });
+      chrome.tabs.sendMessage(msg.tabId, { action: "bookingThree" });
     }
-    if (request.action === "submitComplete") {
-      console.log("Received submitComplete message:", request.data);
+    if (msg.action === "submitComplete") {
+      console.log("Received submitComplete message:", msg.data);
       // 这里可以进行进一步处理，比如根据收到的数据修改扩展的行为
-      onTabsUpdateListener()
+      await onTabsUpdateListener()
+    }
+    if (msg.action === "startAuto") {
+      await onTabsUpdateListener()
     }
   });
 }
 
 // 监听标签页更新 -----版本1 (Update supervision tab - ver 1)
-const onTabsUpdateListener = () => {
+const onTabsUpdateListener = async () => {
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     console.log('Page update', changeInfo, tab);
     if (changeInfo.status === 'complete' && tab.active) {
-      console.log(tab, tab.url, targetUrl2);
       // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
       // When the tab page is loaded and is activated, send a msg to Content.js
       if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面 (Check login page)
-        chrome.tabs.sendMessage(tabId, { action: "login" })
+        chrome.tabs.sendMessage(tabId, { action: "login" });
       } else if (tab && tab.url && tab.url.includes(targetUrl2)) {
         // 点击第二个按钮 (Click the second button)
         chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
         chrome.tabs.sendMessage(tabId, { action: "bookingOne" });
+      }
+      if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithOutRoutingDtl")) {
+        chrome.tabs.sendMessage(tabId, { action: "checkPageContent", tabId: tabId });
       }
     }
   });
@@ -123,12 +128,12 @@ async function sendDataToExternalApi(data) {
 }
 
 // 每30秒检查一次
-setInterval(refreshActiveTab, 30000);
+// setInterval(refreshActiveTab, 30000);
 
 const init = () => {
   onRuntimeMessageListener();
   onBeforeSendHeadersListener();
-  onTabsUpdateListener(); // 初始化标签页更新监听
+  // onTabsUpdateListener(); // 初始化标签页更新监听
 }
 
 init()
