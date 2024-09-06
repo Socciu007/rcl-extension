@@ -273,6 +273,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     postForm();
   }
   if (request.action === 'login') {
+    globalData = request.data
     const loginBtn = document.querySelector("#onLoginID")
     if (loginBtn) {
       login()
@@ -307,6 +308,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
   }
   //填入数据 頁面1 (Scrape data in page 1)
   if (request.action === "bookingOne") {
+    // globalData = request.data
     const element = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.first_section.currentSection > div > div > div:nth-child(5) > div > div:nth-child(4) > div.col-lg-7 > div")
     await element.click()
     // pol和pod操作
@@ -316,16 +318,16 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     const ebNoElement = document.querySelector("#customerReference")
     ebNoElement.value = globalData['ebNo']
     // 箱型选择
-    const event = new Event('change', { bubbles: true });
+    const event = new Event('change', { bubbles: true })
     const ctnSize = 40//boxMapping[globalData['containner_vgms'][0]['cType']]
     const ctnType = "BU"//boxMapping[globalData['containner_vgms'][0]['cType']].slice(2)
-    const typeElement = document.getElementById('type0');
+    const typeElement = document.getElementById('type0')
     // 设置 select 元素的 value，以选择对应的 option
-    typeElement.value = ctnType;
-    typeElement.dispatchEvent(event);
-    const sizeElement = document.getElementById('size0');
-    sizeElement.value = ctnSize;
-    sizeElement.dispatchEvent(event);
+    typeElement.value = ctnType
+    typeElement.dispatchEvent(event)
+    const sizeElement = document.getElementById('size0')
+    sizeElement.value = ctnSize
+    sizeElement.dispatchEvent(event)
     // 箱子数量
     const ctnCount = document.querySelector("#laden0")
     ctnCount.value = 1
@@ -333,9 +335,9 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     const cargoWeight = document.querySelector("#grossContainerWeight0")
     cargoWeight.value = globalData['goods'][0]['weight']
     await ctnCount.click()
-    await delay(1000)
+    // await delay(1000)
     await cargoWeight.click()
-    await delay(1000)
+    // await delay(1000)
     // hsCode选择
     const hsClick = document.querySelector("#indexShipperDialog0")
     await hsClick.click()
@@ -369,27 +371,27 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
   }
   // 填入 页面2 (Scrape data in page 2)
   if (request.action === "bookingTwo") {
-    console.log("进入该页面一次");
-    const parentNodes = document.querySelectorAll('.container_title');
+    console.log("进入该页面一次")
+    // globalData = request.data
+    const parentNodes = document.querySelectorAll('.container_title')
     const voyage = globalData['voyage']
     const shipName = globalData['shipName']
     parentNodes.forEach(parent => {
       // 假设我们对每个父节点下的第一个和第二个 div 感兴趣
-      const div1 = parent.querySelector('div:nth-of-type(1)');
-      const div2 = parent.querySelector('div:nth-of-type(2)');
+      const div1 = parent.querySelector('div:nth-of-type(1)')
+      const div2 = parent.querySelector('div:nth-of-type(2)')
 
       // 检查这两个 div 是否满足某些条件，这里以文本内容为例 (Check text content in div with globalData)
       if (div1 && div2 && div1.textContent.includes(voyage) && div2.textContent.includes(shipName)) {
         // 如果两个 div 都满足条件，则执行点击操作
         // 这里以 div1 被点击为例，根据实际情况调整
-        parent.click();
+        parent.click()
       }
     });
     const next2 = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.third_section.currentSection > div > div.col-lg-8.mobRes > div.clas_sec_tel > div.row > div.col-md-4.sub > div.btn_ctn_ttn2.next-button")
     next2.click()
-  }
-  // 填入 页面3 (Scrape data in page 3)
-  if (request.action === "bookingThree") {
+
+    await delay(3000)
     console.log("进入3");
     // 发货人填写
     const shipperName = globalData["sea_order_contacts"].filter(contact => contact.type === true);
@@ -410,6 +412,28 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     // const pushBtn = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.fifth_section.currentSection > div.row > div.col-md-12.sub.mar_15_fr.btm_mar_30 > div.btn_ctn_ttn2.tb_bt_ct.next-buttons.mt-2")
     // pushBtn.click()
   }
+  // 填入 页面3 (Scrape data in page 3)
+  // if (request.action === "bookingThree") {
+  //   console.log("进入3");
+  //   // 发货人填写
+  //   const shipperName = globalData["sea_order_contacts"].filter(contact => contact.type === true);
+  //   const shipper = document.querySelector("#shipperName")
+  //   shipper.value = shipperName[0].master
+  //   const contactPerson = document.querySelector("#contact")
+  //   contactPerson.value = "GRACE"
+  //   const contactPersonEmail = document.querySelector("#email")
+  //   contactPersonEmail.value = "GRACE@SFYF.CN"
+  //   // 选择日期
+  //   const etdTime = globalData['sailingTime'].split("-")
+  //   const lastTime = `${+etdTime[2] - 6}/${etdTime[1]}/${etdTime[0]}`
+  //   const pickupPlan = document.querySelector("#dateEmptyPickup")
+  //   pickupPlan.value = lastTime
+  //   const cargoAvailability = document.querySelector("#dateCargoAvailability")
+  //   cargoAvailability.value = lastTime
+  //   //提交
+  //   // const pushBtn = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.fifth_section.currentSection > div.row > div.col-md-12.sub.mar_15_fr.btm_mar_30 > div.btn_ctn_ttn2.tb_bt_ct.next-buttons.mt-2")
+  //   // pushBtn.click()
+  // }
 });
 
 function delay(duration) {

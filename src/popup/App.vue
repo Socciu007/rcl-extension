@@ -74,11 +74,11 @@ export default {
         });
         // 发送到content.js
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, { action: "login", data: response.data.data });
+          chrome.tabs.sendMessage(tabs[0].id, { action: "login" });
         });
 
         // Sent msg to background.js to init automation page
-        chrome.runtime.sendMessage({ action: 'startAuto' });
+        chrome.runtime.sendMessage({ action: 'startAuto', data: response.data.data });
         return response.data;  // 返回数据用于进一步处理
       } catch (error) {
         console.error("Error during submission:", error);  // 打印错误信息
@@ -141,10 +141,10 @@ export default {
       // eslint-disable-next-line no-undef
       chrome.tabs.query({}, async (tabs) => {
         let siteTab = tabs.find(tab => tab.url && tab.url.includes(siteUrl));
-        let siteTab1 = tabs.find(tab => tab.url && tab.url.includes(siteUrl1));
-        let siteTab2 = tabs.find(tab => tab.url && tab.url.includes(siteUrl2));
+        // let siteTab1 = tabs.find(tab => tab.url && tab.url.includes(siteUrl1));
+        // let siteTab2 = tabs.find(tab => tab.url && tab.url.includes(siteUrl2));
 
-        if (siteTab || siteTab1 || siteTab2) {
+        if (siteTab) {
           // 如果找到了，切换到该标签页
           // eslint-disable-next-line no-undef
           chrome.tabs.update(siteTab.id, { active: true }, async () => {

@@ -2,6 +2,7 @@ const customUa = 'hello world ua'
 const targetUrl = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking';
 const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67'; //Url login page
 const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring'; // Url root page (refresh page)
+const globalData = { 'data': {} }
 
 const onBeforeSendCallback = (details) => {
   for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -47,7 +48,7 @@ const onRuntimeMessageListener = () => {
     }
     // const tabId = msg.tabId;
     if (msg.action === "bookingTwo") {
-      chrome.tabs.sendMessage(msg.tabId, { action: "bookingTwo" });
+      chrome.tabs.sendMessage(msg.tabId, { action: "bookingTwo", data: globalData.data });
     } else if (msg.action === "bookingThree") {
       chrome.tabs.sendMessage(msg.tabId, { action: "bookingThree" });
     }
@@ -57,6 +58,7 @@ const onRuntimeMessageListener = () => {
       await onTabsUpdateListener()
     }
     if (msg.action === "startAuto") {
+      globalData.data = msg.data
       await onTabsUpdateListener()
     }
   });
@@ -65,7 +67,7 @@ const onRuntimeMessageListener = () => {
 // 监听标签页更新 -----版本1 (Update supervision tab - ver 1)
 const onTabsUpdateListener = async () => {
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    console.log('Page update', changeInfo, tab);
+    console.log('Page update', changeInfo, tab)
     if (changeInfo.status === 'complete' && tab.active) {
       // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
       // When the tab page is loaded and is activated, send a msg to Content.js
@@ -76,7 +78,7 @@ const onTabsUpdateListener = async () => {
         chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
-        chrome.tabs.sendMessage(tabId, { action: "bookingOne" });
+        chrome.tabs.sendMessage(tabId, { action: "bookingOne", data: globalData.data });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithOutRoutingDtl")) {
         chrome.tabs.sendMessage(tabId, { action: "checkPageContent", tabId: tabId });
