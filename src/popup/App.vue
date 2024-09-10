@@ -92,7 +92,7 @@ export default {
           transportTerms: '',
           appointNub: '',
           matchTaime: '',
-          shipName: 'KTY 2413S',
+          shipName: 'SKY 2413S',
           voyage: 'RNV2',
           portVoyage: '',
           bindingNotice: '',

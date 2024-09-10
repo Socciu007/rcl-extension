@@ -273,7 +273,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     postForm();
   }
   if (request.action === 'login') {
-    globalData = request.data
+    // globalData = request.data
     const loginBtn = document.querySelector("#onLoginID")
     if (loginBtn) {
       login()
