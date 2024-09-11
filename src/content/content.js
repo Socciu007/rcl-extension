@@ -248,9 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
 // Listen to messages from popup.js and background.js
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
   console.log('Message received from App.vue:', request);
-  if (request.action === 'textLily') {
-    console.log('传输成功啦哇咔咔');
-  }
   if (request.action === "submitComplete") {
     const logOut = document.querySelector("body > div.container-fluid.hidePrint > header > nav > div.navbar-collapse > ul.navbar-nav.my-lg-0 > li:nth-child(1) > a.nav-link.dropdown-toggle.text-muted.pt-0 > div")
     if (logOut) {
@@ -305,6 +302,26 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
         element1.click();
       }
     }, 500);
+  }
+  if (request.action === "startEShipping") {
+    const homeElement = document.querySelector("#headerLogo")
+    await homeElement.click()
+  }
+  if (request.action === "eShippingDashboard") {
+    console.log('Click the third button');
+    // Execute click third button to hide booking list
+    const element = document.querySelector("#section1 > div.row > div.col-lg-2.px-0 > div > ul > a:nth-child(3) > li > div > div.col-9")
+    if (element) {
+      await element.click();
+    }
+  }
+  if (request.action === "editBooking") {
+    // Execute to handle editing of booking
+    const element1 = document.querySelector("#eSiDataTable > tr:nth-child(1) > td:nth-child(5) > i")
+    console.log("test", element1);
+    if (element1) {
+      await element1.click();
+    }
   }
   //填入数据 頁面1 (Scrape data in page 1)
   if (request.action === "bookingOne") {

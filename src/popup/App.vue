@@ -281,54 +281,17 @@ export default {
         console.error("Error during submission:", error);  // 打印错误信息
         return null;  // 错误处理，返回null或其他错误信息
       }
-      // // 点击提交判断是不是初始页，不是就更新，应对多票订场的问题
-      // const data = { 'ebNo': this.inputValue };
-      // // 确保使用 await 等待 fetch 操作完成
-      // const response = await axios(
-
-      //   {
-      //     url: "http://localhost:3001/cargosmart/edi/seaOrder",
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       // 如有必要，添加更多头部信息
-      //     },
-      //     data: JSON.stringify(data),
-      //   }
-      // );
-      // console.log(response);
-
-      // // 确保使用 await 等待响应的 JSON 解析完成
-      // const responseData = response.json();
-      // console.log('获取单子数据', responseData);
-
-      // // 提交完成后，发送消息到 content script 或 background script 执行自动化操作
-      // // chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      // //   chrome.tabs.sendMessage(tabs[0].id, { action: "submitComplete", "data": data },
-      // //     (response) => {
-      // //       console.log("SendSuccess!!!!!!!!!!!!!!!!!!");
-      // //     }
-      // //   );
-      // // });
-      // // chrome.tabs.sendMessage(
-      // //   tabs[0].id,
-      // //   { action: "textLily", data: "your data" },
-      // //   (response) => {
-      // //     console.log("Message sent to content.js");
-      // //   }
-      // // );
-      // return responseData
     },
     triggerContentScript() {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {action: "triggerOnClickEvent"});
+        chrome.tabs.sendMessage(tabs[0].id, {action: "eShippingDashboard"});
       });
     },
     triggerAction() {
       // 发送消息到 background.js (Send to mesage to background.js)
       chrome.runtime.sendMessage({ action: 'startAutoRefresh' });
     },
-    async openSiteAndCheck() {
+    async openSiteAndCheck() { 
       // 指定要检查的网站 URL (Specify the URL you want to check)
       const siteUrl = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67';
       const siteUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/eBookingService'

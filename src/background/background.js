@@ -73,9 +73,15 @@ const onTabsUpdateListener = async () => {
       // When the tab page is loaded and is activated, send a msg to Content.js
       if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面 (Check login page)
         chrome.tabs.sendMessage(tabId, { action: "login" });
+      } else if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingDashbboard")) {
+        chrome.tabs.sendMessage(tabId, { action: "eShippingDashboard" });
       } else if (tab && tab.url && tab.url.includes(targetUrl2)) {
         // 点击第二个按钮 (Click the second button)
         chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
+      }
+      if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/E-ShippingWebApp/spring/eShippingDashBoard")) {
+        // Send edit booking in shipping dashboard
+        chrome.tabs.sendMessage(tabId, { action: "editBooking" });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
         chrome.tabs.sendMessage(tabId, { action: "bookingOne", data: globalData.data });

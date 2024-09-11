@@ -13,10 +13,16 @@
 export default {
   name: 'viewA',
   methods: {
-    onGetCustomUa () {
-      chrome.runtime.sendMessage({type: 'getCustomUserAgent'}, function(response) {
-        alert(JSON.stringify(response))
-      })
+    onGetCustomUa() {
+      // 发送到content.js
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "startEShipping" });
+      });
+
+      // Send a message to the background
+      // chrome.runtime.sendMessage({type: 'getCustomUserAgent'}, function(response) {
+      //   alert(JSON.stringify(response))
+      // })
     }
   }
 }
