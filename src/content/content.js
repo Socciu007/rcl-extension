@@ -307,23 +307,140 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     const homeElement = document.querySelector("#headerLogo")
     await homeElement.click()
   }
+  // Execute click third button to hide booking list
   if (request.action === "eShippingDashboard") {
     console.log('Click the third button');
-    // Execute click third button to hide booking list
     const element = document.querySelector("#section1 > div.row > div.col-lg-2.px-0 > div > ul > a:nth-child(3) > li > div > div.col-9")
     if (element) {
       await element.click();
     }
   }
+  // Start to handle editing of booking
   if (request.action === "editBooking") {
-    // Execute to handle editing of booking
-    const element1 = document.querySelector("#eSiDataTable > tr:nth-child(1) > td:nth-child(5) > i")
-    console.log("test", element1);
-    if (element1) {
-      await element1.click();
+    const container = document.querySelectorAll("#eSiDataTable")[0]
+    if (container) {
+      await delay(3000)
+      const element1 = container.querySelector("tbody#eSiDataTable > tr:nth-child(1) > td:nth-child(5) > i")
+      const element2 = container.querySelectorAll("tr:nth-child(1)")[0]
+      console.log(container.textContent);
+      console.log("test1", element1);
+      console.log("test2", element2);
+      if (element1) {
+        await element1.click();
+      }
     }
   }
-  //填入数据 頁面1 (Scrape data in page 1)
+  // Execute to handle editing of booking
+  if (request.action === "executeEditBooking") {
+    const bookingData = request.data
+    console.log(bookingData);
+    const element = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.currentSection.defaultDisplayNone > section > div.col-12.mb-2 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > div")
+    if (element) {
+      await element.click();
+    }
+
+    // Edit page 1
+    setTimeout(async () => {
+      // SHIPMENT & SAILING
+      const event = new Event('change', { bubbles: true })
+      const placeOfIssueElement = document.getElementById('placeDateOfIssue')
+      placeOfIssueElement.value = bookingData.placeOfIssue
+      placeOfIssueElement.dispatchEvent(event)
+
+      const placeOfReceiptElement = document.getElementById('placeOfReceipt')
+      placeOfReceiptElement.value = bookingData.placeOfReceipt
+      placeOfReceiptElement.dispatchEvent(event)
+
+      const polElement = document.getElementById('pol')
+      polElement.value = bookingData.portOfLoading
+      polElement.dispatchEvent(event)
+
+      const podElement = document.getElementById('pod')
+      podElement.value = bookingData.portOfDischarge
+      podElement.dispatchEvent(event)
+
+      const placeOfDeliveryElement = document.getElementById('placeOfDelivery')
+      placeOfDeliveryElement.value = bookingData.portOfDelivery
+      placeOfDeliveryElement.dispatchEvent(event)
+
+      const blTypeElement = document.getElementById('blType')
+      blTypeElement.value = bookingData.blType
+      blTypeElement.dispatchEvent(event)
+
+      // SHIPMENT DETAILS
+      const telephoneElement = document.getElementById('telephone')
+      telephoneElement.value = bookingData.tel
+      telephoneElement.dispatchEvent(event)
+
+      const emailElement = document.getElementById('email')
+      emailElement.value = bookingData.email
+      emailElement.dispatchEvent(event)
+
+      const additionMls0Element = document.getElementById('additionMls0')
+      additionMls0Element.value = bookingData.moreEmail
+      additionMls0Element.dispatchEvent(event)
+
+      const paymentTermElement = document.getElementById('paymentTerm')
+      paymentTermElement.value = bookingData.payment
+      paymentTermElement.dispatchEvent(event)
+
+      if (bookingData.location) {
+        const destinyCountryElement = document.getElementById('destiny-country')
+        await destinyCountryElement.click()
+      }
+
+      const payerCompanyElement = document.getElementById('freightPaymentTermCompName')
+      payerCompanyElement.value = bookingData.payerCompany
+      payerCompanyElement.dispatchEvent(event)
+
+      // CUSTOMER DETAILS
+      const shipperNameElement = document.getElementById('shipperName')
+      shipperNameElement.value = bookingData.shipperName
+      shipperNameElement.dispatchEvent(event)
+
+      const shipperAddElement = document.getElementById('shipperAdd')
+      shipperAddElement.value = bookingData.shipperAdd
+      shipperAddElement.dispatchEvent(event)
+
+      const consigneeNameElement = document.getElementById('consigneeName')
+      consigneeNameElement.value = bookingData.consigneeName
+      consigneeNameElement.dispatchEvent(event)
+
+      const consigneeAddElement = document.getElementById('consigneeAdd')
+      consigneeAddElement.value = bookingData.consigneeAdd
+      consigneeAddElement.dispatchEvent(event)
+
+      const notifyPartyNameElement = document.getElementById('notifyPartyName')
+      notifyPartyNameElement.value = bookingData.notifyPartyName
+      notifyPartyNameElement.dispatchEvent(event)
+
+      const notifyPartyAddElement = document.getElementById('notifyPartyAdd')
+      notifyPartyAddElement.value = bookingData.notifyPartyAdd
+      notifyPartyAddElement.dispatchEvent(event)
+
+      // Save information
+      const submitElement = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.currentSection.defaultDisplayNone > section > div.col-12.mb-2 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > button")
+      if (submitElement) {
+        await submitElement.click();
+        await delay(3000)
+        const enterElement = document.querySelector("body > div.swal-overlay.swal-overlay--show-modal > div > div.swal-footer > div > button")
+        if (enterElement) {
+          await enterElement.click();
+        }
+        const nextElement = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.currentSection.defaultDisplayNone > section > div.row > div:nth-child(4) > div > div:nth-child(3)");
+        if (nextElement) {
+          await nextElement.click();
+        }
+      }
+    }, 500)
+
+    // Edit page 2
+    const elementEdit = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.nextSection.defaultDisplayNone > section > div.grid-container > div.col-12 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > div.col-lg-5.col-md-5.col-3.editBtnShipInstr.bookNowButton")
+    if (elementEdit) {
+      await elementEdit.click();
+    }
+  }
+  // 填入数据 頁面1 (Scrape data in page 1)
   if (request.action === "bookingOne") {
     globalData = request.data
     const element = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.first_section.currentSection > div > div > div:nth-child(5) > div > div:nth-child(4) > div.col-lg-7 > div")
@@ -411,6 +528,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     await delay(3000)
     console.log("进入3");
     // 发货人填写
+    const event = new Event('change', { bubbles: true })
     const shipperName = globalData["sea_order_contacts"].filter(contact => contact.type === true);
     const shipper = document.querySelector("#shipperName")
     shipper.value = shipperName[0].master
@@ -425,32 +543,13 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     pickupPlan.value = lastTime
     const cargoAvailability = document.querySelector("#dateCargoAvailability")
     cargoAvailability.value = lastTime
+    cargoAvailability.dispatchEvent(event)
     //提交
-    // const pushBtn = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.fifth_section.currentSection > div.row > div.col-md-12.sub.mar_15_fr.btm_mar_30 > div.btn_ctn_ttn2.tb_bt_ct.next-buttons.mt-2")
-    // pushBtn.click()
+    const pushBtn = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.fifth_section.currentSection > div.row > div.col-md-12.sub.mar_15_fr.btm_mar_30 > div.btn_ctn_ttn2.tb_bt_ct.next-buttons.mt-2")
+    if (pushBtn) {
+      await pushBtn.click()
+    }
   }
-  // 填入 页面3 (Scrape data in page 3)
-  // if (request.action === "bookingThree") {
-  //   console.log("进入3");
-  //   // 发货人填写
-  //   const shipperName = globalData["sea_order_contacts"].filter(contact => contact.type === true);
-  //   const shipper = document.querySelector("#shipperName")
-  //   shipper.value = shipperName[0].master
-  //   const contactPerson = document.querySelector("#contact")
-  //   contactPerson.value = "GRACE"
-  //   const contactPersonEmail = document.querySelector("#email")
-  //   contactPersonEmail.value = "GRACE@SFYF.CN"
-  //   // 选择日期
-  //   const etdTime = globalData['sailingTime'].split("-")
-  //   const lastTime = `${+etdTime[2] - 6}/${etdTime[1]}/${etdTime[0]}`
-  //   const pickupPlan = document.querySelector("#dateEmptyPickup")
-  //   pickupPlan.value = lastTime
-  //   const cargoAvailability = document.querySelector("#dateCargoAvailability")
-  //   cargoAvailability.value = lastTime
-  //   //提交
-  //   // const pushBtn = document.querySelector("#eBookingCreation > div.container-fluid.shrink > div.bookingMergedPage.page-wrapper.fifth_section.currentSection > div.row > div.col-md-12.sub.mar_15_fr.btm_mar_30 > div.btn_ctn_ttn2.tb_bt_ct.next-buttons.mt-2")
-  //   // pushBtn.click()
-  // }
 });
 
 function delay(duration) {

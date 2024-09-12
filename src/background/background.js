@@ -2,7 +2,7 @@ const customUa = 'hello world ua'
 const targetUrl = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking';
 const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67'; //Url login page
 const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring'; // Url root page (refresh page)
-const globalData = { 'data': {} }
+const globalData = { 'data': {}, 'bookingData': {} }
 
 const onBeforeSendCallback = (details) => {
   for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -61,27 +61,37 @@ const onRuntimeMessageListener = () => {
       globalData.data = msg.data
       await onTabsUpdateListener()
     }
+    // Received msg from viewA.vue
+    if (msg.action === "saveBookingData") {
+      globalData.bookingData = msg.data
+      console.log('Booking data saved:', globalData.bookingData);
+    }
   });
 }
 
 // 监听标签页更新 -----版本1 (Update supervision tab - ver 1)
 const onTabsUpdateListener = async () => {
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    console.log('Page update', changeInfo, tab)
     if (changeInfo.status === 'complete' && tab.active) {
+      console.log('Page update', changeInfo, tab)
       // 当标签页加载完成并且是激活状态时，向 content.js 发送消息
       // When the tab page is loaded and is activated, send a msg to Content.js
       if (tab && tab.url && tab.url.includes(targetUrl1)) {//判断是否为登录页面 (Check login page)
         chrome.tabs.sendMessage(tabId, { action: "login" });
       } else if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingDashbboard")) {
+        // Click the third button
         chrome.tabs.sendMessage(tabId, { action: "eShippingDashboard" });
       } else if (tab && tab.url && tab.url.includes(targetUrl2)) {
         // 点击第二个按钮 (Click the second button)
         chrome.tabs.sendMessage(tabId, { action: "tabUpdated" });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/E-ShippingWebApp/spring/eShippingDashBoard")) {
-        // Send edit booking in shipping dashboard
+        // Send action about start edit booking in shipping dashboard
         chrome.tabs.sendMessage(tabId, { action: "editBooking" });
+      }
+      if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/E-ShippingWebApp/spring/onLoadEshippingInstruction")) {
+        // Send action about execute edit booking in shipping dashboard
+        chrome.tabs.sendMessage(tabId, { action: "executeEditBooking", data: globalData.bookingData });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
         chrome.tabs.sendMessage(tabId, { action: "bookingOne", data: globalData.data });

@@ -75,7 +75,7 @@ export default {
           uploadPort: 3108,
           purposePort: 3108,
           shipCompany: 9,
-          sailingTime: '2023-11-17',
+          sailingTime: '2024-09-12',
           putType: 0,
           declare: '',
           interior: false,
