@@ -321,10 +321,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     if (container) {
       await delay(3000)
       const element1 = container.querySelector("tbody#eSiDataTable > tr:nth-child(1) > td:nth-child(5) > i")
-      const element2 = container.querySelectorAll("tr:nth-child(1)")[0]
-      console.log(container.textContent);
-      console.log("test1", element1);
-      console.log("test2", element2);
+      // const element2 = container.querySelectorAll("tr:nth-child(1)")[0]
       if (element1) {
         await element1.click();
       }
@@ -435,10 +432,56 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     }, 500)
 
     // Edit page 2
-    const elementEdit = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.nextSection.defaultDisplayNone > section > div.grid-container > div.col-12 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > div.col-lg-5.col-md-5.col-3.editBtnShipInstr.bookNowButton")
-    if (elementEdit) {
-      await elementEdit.click();
-    }
+    setTimeout(async () => {
+      const elementEdit = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.nextSection.defaultDisplayNone > section > div.grid-container > div.col-12 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > div.col-lg-5.col-md-5.col-3.editBtnShipInstr.bookNowButton")
+      if (elementEdit) {
+        await elementEdit.click();
+      }
+      const event = new Event('change', { bubbles: true });
+      const containerElement = document.getElementById('containerNo');
+      containerElement.value = bookingData.containerNo;
+      containerElement.dispatchEvent(event);
+
+      const carrierSealElement = document.getElementById('carrierSeal');
+      carrierSealElement.value = "SHA2413594";
+      carrierSealElement.dispatchEvent(event);
+
+      const shipperSealElement = document.getElementById('shipperSeal');
+      shipperSealElement.value = "Shipper";
+      shipperSealElement.dispatchEvent(event);
+
+      const ofPackagesElement = document.getElementById('ofPackages');
+      ofPackagesElement.value = "920";
+      ofPackagesElement.dispatchEvent(event);
+
+      const grossContainerWeightElement = document.getElementById('grossContainerWeight');
+      grossContainerWeightElement.value = "23092";
+      grossContainerWeightElement.dispatchEvent(event);
+
+      const grossCargoMeasurementElement = document.getElementById('grossCargoMeasurement');
+      grossCargoMeasurementElement.value = "25";
+      grossCargoMeasurementElement.dispatchEvent(event);
+
+      const pkgKindElement = document.querySelector('#result_dtl > tr > td:nth-child(14) > i.fa.fa-search');
+      await pkgKindElement.click();
+      setTimeout(async () => {
+        const pkgKindFindCodeElement = document.getElementById('pkgKindFindCode');
+        pkgKindFindCodeElement.value = 'BAG';
+        await selectOption('#select2-pkgKindColumnBy-container', '.select2-results__options', 'Package Name');
+
+        const searchElement = document.querySelector('#PKGModal > div > div > div > div.container-fluid > div > div:nth-child(2) > div.col-md-4 > div.btn_ctn_ttn2');
+        await searchElement.click();
+
+        const page2Element = document.querySelector('#paginationPackageKind > div > div > ul > li:nth-child(3) > a');
+        await page2Element.click();
+
+        const choiceElement = document.querySelector('#PKGbodyModal > tr:nth-child(9)');
+        await choiceElement.click();
+
+      }, 1000);
+    }, 500);
+
+
   }
   // 填入数据 頁面1 (Scrape data in page 1)
   if (request.action === "bookingOne") {

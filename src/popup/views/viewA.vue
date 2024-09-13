@@ -53,5 +53,12 @@ export default {
   background-color: cadetblue;
   height: 100%;
   font-size: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  button {
+    width: fit-content;
+  }
 }
 </style>
