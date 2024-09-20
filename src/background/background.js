@@ -2,7 +2,7 @@ const customUa = 'hello world ua'
 const targetUrl = 'https://eservice.rclgroup.com/e-commerce/spring/manageBooking';
 const targetUrl1 = 'https://eservice.rclgroup.com/e-commerce/spring/index?action=65426f6f6b696e67'; //Url login page
 const targetUrl2 = 'https://eservice.rclgroup.com/e-commerce/spring'; // Url root page (refresh page)
-const globalData = { 'data': {}, 'bookingData': {} }
+const globalData = {'data': {}, 'bookingData': {}}
 
 const onBeforeSendCallback = (details) => {
   for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -122,7 +122,7 @@ function refreshActiveTab() {
 async function sendDataToExternalApi(data) {
   console.log('调用eb接口，将数据传输给eb');
   const externalApiUrl = "https://www.dadaex.cn/api/seaOrder/rclyp"; // 替换为您的外部接口 URL
-  console.log('获取到了数据了', data);
+  console.log('获取到了数据了', data); 
 
   try {
     const response = await fetch(externalApiUrl, {

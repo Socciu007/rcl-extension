@@ -477,11 +477,8 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
 
         const choiceElement = document.querySelector('#PKGbodyModal > tr:nth-child(9)');
         await choiceElement.click();
-
       }, 1000);
     }, 500);
-
-
   }
   // 填入数据 頁面1 (Scrape data in page 1)
   if (request.action === "bookingOne") {
