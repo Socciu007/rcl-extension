@@ -329,8 +329,8 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
   }
   // Execute to handle editing of booking
   if (request.action === "executeEditBooking") {
-    const bookingData = request.data
-    console.log(bookingData);
+    const globalData = request.data
+
     const element = document.querySelector("#eBookingCreationSaveTp > div.container-fluid.currentSection.defaultDisplayNone > section > div.col-12.mb-2 > div > div.col-lg-2.col-md-3.col-12.d-flex.justify-content-end > div > div")
     if (element) {
       await element.click();
@@ -341,78 +341,78 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       // SHIPMENT & SAILING
       const event = new Event('change', { bubbles: true })
       const placeOfIssueElement = document.getElementById('placeDateOfIssue')
-      placeOfIssueElement.value = bookingData.placeOfIssue
+      placeOfIssueElement.value = globalData.bookingData.placeOfIssue
       placeOfIssueElement.dispatchEvent(event)
 
       const placeOfReceiptElement = document.getElementById('placeOfReceipt')
-      placeOfReceiptElement.value = bookingData.placeOfReceipt
+      placeOfReceiptElement.value = globalData.bookingData.placeOfReceipt
       placeOfReceiptElement.dispatchEvent(event)
 
       const polElement = document.getElementById('pol')
-      polElement.value = bookingData.portOfLoading
+      polElement.value = globalData.bookingData.portOfLoading
       polElement.dispatchEvent(event)
 
       const podElement = document.getElementById('pod')
-      podElement.value = bookingData.portOfDischarge
+      podElement.value = globalData.bookingData.portOfDischarge
       podElement.dispatchEvent(event)
 
       const placeOfDeliveryElement = document.getElementById('placeOfDelivery')
-      placeOfDeliveryElement.value = bookingData.portOfDelivery
+      placeOfDeliveryElement.value = globalData.bookingData.portOfDelivery
       placeOfDeliveryElement.dispatchEvent(event)
 
       const blTypeElement = document.getElementById('blType')
-      blTypeElement.value = bookingData.blType
+      blTypeElement.value = globalData.bookingData.blType
       blTypeElement.dispatchEvent(event)
 
       // SHIPMENT DETAILS
       const telephoneElement = document.getElementById('telephone')
-      telephoneElement.value = bookingData.tel
+      telephoneElement.value = globalData.bookingData.tel
       telephoneElement.dispatchEvent(event)
 
       const emailElement = document.getElementById('email')
-      emailElement.value = bookingData.email
+      emailElement.value = globalData.bookingData.email
       emailElement.dispatchEvent(event)
 
       const additionMls0Element = document.getElementById('additionMls0')
-      additionMls0Element.value = bookingData.moreEmail
+      additionMls0Element.value = globalData.bookingData.moreEmail
       additionMls0Element.dispatchEvent(event)
 
       const paymentTermElement = document.getElementById('paymentTerm')
-      paymentTermElement.value = bookingData.payment
+      paymentTermElement.value = globalData.bookingData.payment
       paymentTermElement.dispatchEvent(event)
 
-      if (bookingData.location) {
+      if (globalData.bookingData.location) {
         const destinyCountryElement = document.getElementById('destiny-country')
         await destinyCountryElement.click()
       }
 
       const payerCompanyElement = document.getElementById('freightPaymentTermCompName')
-      payerCompanyElement.value = bookingData.payerCompany
+      payerCompanyElement.value = globalData.bookingData.payerCompany
       payerCompanyElement.dispatchEvent(event)
 
       // CUSTOMER DETAILS
       const shipperNameElement = document.getElementById('shipperName')
-      shipperNameElement.value = bookingData.shipperName
+      shipperNameElement.value = globalData.bookingData.shipperName
       shipperNameElement.dispatchEvent(event)
 
       const shipperAddElement = document.getElementById('shipperAdd')
-      shipperAddElement.value = bookingData.shipperAdd
+      shipperAddElement.value = globalData.bookingData.shipperAdd
       shipperAddElement.dispatchEvent(event)
 
       const consigneeNameElement = document.getElementById('consigneeName')
-      consigneeNameElement.value = bookingData.consigneeName
+      consigneeNameElement.value = globalData.bookingData.consigneeName
       consigneeNameElement.dispatchEvent(event)
 
       const consigneeAddElement = document.getElementById('consigneeAdd')
-      consigneeAddElement.value = bookingData.consigneeAdd
+      consigneeAddElement.value = globalData.bookingData.consigneeAdd
       consigneeAddElement.dispatchEvent(event)
 
       const notifyPartyNameElement = document.getElementById('notifyPartyName')
-      notifyPartyNameElement.value = bookingData.notifyPartyName
+      notifyPartyNameElement.value = globalData.bookingData.notifyPartyName
       notifyPartyNameElement.dispatchEvent(event)
 
       const notifyPartyAddElement = document.getElementById('notifyPartyAdd')
-      notifyPartyAddElement.value = bookingData.notifyPartyAdd
+      notifyPartyAddElement.value = globalData.bookingData.notifyPartyAdd
       notifyPartyAddElement.dispatchEvent(event)
 
       // Save information
@@ -439,7 +439,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       }
       const event = new Event('change', { bubbles: true });
       const containerElement = document.getElementById('containerNo');
-      containerElement.value = bookingData.containerNo;
+      containerElement.value = globalData.data.containner_vgms[0].boxNub || 'TGBU7900930';
       containerElement.dispatchEvent(event);
 
       const carrierSealElement = document.getElementById('carrierSeal');
@@ -455,18 +455,18 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       ofPackagesElement.dispatchEvent(event);
 
       const grossContainerWeightElement = document.getElementById('grossContainerWeight');
-      grossContainerWeightElement.value = "23092";
+      grossContainerWeightElement.value = globalData.data.goods[0].grossWeight || "23092";
       grossContainerWeightElement.dispatchEvent(event);
 
       const grossCargoMeasurementElement = document.getElementById('grossCargoMeasurement');
-      grossCargoMeasurementElement.value = "25";
+      grossCargoMeasurementElement.value = globalData.data.goods[0].amount || "25";
       grossCargoMeasurementElement.dispatchEvent(event);
 
       const pkgKindElement = document.querySelector('#result_dtl > tr > td:nth-child(14) > i.fa.fa-search');
       await pkgKindElement.click();
       setTimeout(async () => {
         const pkgKindFindCodeElement = document.getElementById('pkgKindFindCode');
-        pkgKindFindCodeElement.value = 'BAG';
+        pkgKindFindCodeElement.value = globalData.data.goods[0].packType || 'BAG';
         await selectOption('#select2-pkgKindColumnBy-container', '.select2-results__options', 'Package Name');
 
         const searchElement = document.querySelector('#PKGModal > div > div > div > div.container-fluid > div > div:nth-child(2) > div.col-md-4 > div.btn_ctn_ttn2');

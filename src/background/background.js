@@ -64,6 +64,7 @@ const onRuntimeMessageListener = () => {
     // Received msg from viewA.vue
     if (msg.action === "saveBookingData") {
       globalData.bookingData = msg.data
+      globalData.data = msg.data1
       console.log('Booking data saved:', globalData.bookingData);
     }
   });
@@ -91,7 +92,7 @@ const onTabsUpdateListener = async () => {
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/E-ShippingWebApp/spring/onLoadEshippingInstruction")) {
         // Send action about execute edit booking in shipping dashboard
-        chrome.tabs.sendMessage(tabId, { action: "executeEditBooking", data: globalData.bookingData });
+        chrome.tabs.sendMessage(tabId, { action: "executeEditBooking", data: globalData });
       }
       if (tab && tab.url && tab.url.includes("https://eservice.rclgroup.com/e-commerce/spring/eBookingWithoutRouting")) {
         chrome.tabs.sendMessage(tabId, { action: "bookingOne", data: globalData.data });
