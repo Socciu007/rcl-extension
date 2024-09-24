@@ -341,27 +341,27 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       // SHIPMENT & SAILING
       const event = new Event('change', { bubbles: true })
       const placeOfIssueElement = document.getElementById('placeDateOfIssue')
-      placeOfIssueElement.value = globalData.bookingData.placeOfIssue
+      placeOfIssueElement.value = globalData.data.startPortData.nameEn + ', ' + globalData.data.startPortData.code
       placeOfIssueElement.dispatchEvent(event)
 
       const placeOfReceiptElement = document.getElementById('placeOfReceipt')
-      placeOfReceiptElement.value = globalData.bookingData.placeOfReceipt
+      placeOfReceiptElement.value = globalData.data.startPortData.nameEn + ', ' + globalData.data.startPortData.code + ' CY'
       placeOfReceiptElement.dispatchEvent(event)
 
       const polElement = document.getElementById('pol')
-      polElement.value = globalData.bookingData.portOfLoading
+      polElement.value = globalData.data.startPortData.nameEn + ', ' + globalData.data.startPortData.code
       polElement.dispatchEvent(event)
 
       const podElement = document.getElementById('pod')
-      podElement.value = globalData.bookingData.portOfDischarge
+      podElement.value = globalData.data.purposePortData.nameEn + ', ' + globalData.data.purposePortData.code
       podElement.dispatchEvent(event)
 
       const placeOfDeliveryElement = document.getElementById('placeOfDelivery')
-      placeOfDeliveryElement.value = globalData.bookingData.portOfDelivery
+      placeOfDeliveryElement.value = globalData.data.purposePortData.nameEn + ', ' + globalData.data.purposePortData.code + ' CY'
       placeOfDeliveryElement.dispatchEvent(event)
 
       const blTypeElement = document.getElementById('blType')
-      blTypeElement.value = globalData.bookingData.blType
+      blTypeElement.value = globalData.bookingData.blType // 'T' or 'S'
       blTypeElement.dispatchEvent(event)
 
       // SHIPMENT DETAILS
@@ -370,15 +370,15 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       telephoneElement.dispatchEvent(event)
 
       const emailElement = document.getElementById('email')
-      emailElement.value = globalData.bookingData.email
+      emailElement.value = globalData.bookingData.email //'LOUIS@SFYF.CN'
       emailElement.dispatchEvent(event)
 
       const additionMls0Element = document.getElementById('additionMls0')
-      additionMls0Element.value = globalData.bookingData.moreEmail
+      additionMls0Element.value = globalData.bookingData.moreEmail //'GRACE@SFYF.CN'
       additionMls0Element.dispatchEvent(event)
 
       const paymentTermElement = document.getElementById('paymentTerm')
-      paymentTermElement.value = globalData.bookingData.payment
+      paymentTermElement.value = globalData.bookingData.payment //'prepaid'
       paymentTermElement.dispatchEvent(event)
 
       if (globalData.bookingData.location) {
@@ -442,42 +442,90 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
       containerElement.value = globalData.data.containner_vgms[0].boxNub || 'TGBU7900930';
       containerElement.dispatchEvent(event);
 
-      const carrierSealElement = document.getElementById('carrierSeal');
-      carrierSealElement.value = "SHA2413594";
-      carrierSealElement.dispatchEvent(event);
+      const carrierSealElement = document.querySelectorAll('#carrierSeal');
+      for (const element of carrierSealElement) {
+        element.value = "SHA2413594";
+        element.dispatchEvent(event);
+      }
 
-      const shipperSealElement = document.getElementById('shipperSeal');
-      shipperSealElement.value = "Shipper";
-      shipperSealElement.dispatchEvent(event);
+      const shipperSealElement = document.querySelectorAll('#shipperSeal');
+      for (const element of shipperSealElement) {
+        element.value = globalData.data.shipName;
+        element.dispatchEvent(event);
+      }
 
-      const ofPackagesElement = document.getElementById('ofPackages');
-      ofPackagesElement.value = "920";
-      ofPackagesElement.dispatchEvent(event);
+      const ofPackagesElement = document.querySelectorAll('#ofPackages');
+      for (const element of ofPackagesElement) {
+        element.value = "920";
+        element.dispatchEvent(event);
+      }
 
-      const grossContainerWeightElement = document.getElementById('grossContainerWeight');
-      grossContainerWeightElement.value = globalData.data.goods[0].grossWeight || "23092";
-      grossContainerWeightElement.dispatchEvent(event);
+      const grossContainerWeightElement = document.querySelectorAll('#grossContainerWeight');
+      for (const element of grossContainerWeightElement) {
+        element.value = globalData.data.goods[0].grossWeight || "23092";
+        element.dispatchEvent(event);
+      }
 
-      const grossCargoMeasurementElement = document.getElementById('grossCargoMeasurement');
-      grossCargoMeasurementElement.value = globalData.data.goods[0].amount || "25";
-      grossCargoMeasurementElement.dispatchEvent(event);
+      const grossCargoMeasurementElement = document.querySelectorAll('#grossCargoMeasurement');
+      for (const element of grossCargoMeasurementElement) {
+        element.value = globalData.data.goods[0].amount || "25";
+        element.dispatchEvent(event);
+      }
 
-      const pkgKindElement = document.querySelector('#result_dtl > tr > td:nth-child(14) > i.fa.fa-search');
-      await pkgKindElement.click();
-      setTimeout(async () => {
-        const pkgKindFindCodeElement = document.getElementById('pkgKindFindCode');
-        pkgKindFindCodeElement.value = globalData.data.goods[0].packType || 'BAG';
-        await selectOption('#select2-pkgKindColumnBy-container', '.select2-results__options', 'Package Name');
+      // PKG KIND
+      const pkgKindElement = document.querySelectorAll('#result_dtl > tr > td:nth-child(14) > i.fa.fa-search');
+      for (const element of pkgKindElement) {
+        await delay(1000);
+        await element.click();
+        setTimeout(async () => {
+          const pkgKindFindCodeElement = document.getElementById('pkgKindFindCode');
+          pkgKindFindCodeElement.value = globalData.data.goods[0].packType || 'BAG';
+          await selectOption('#select2-pkgKindColumnBy-container', '.select2-results__options', 'Package Name');
 
-        const searchElement = document.querySelector('#PKGModal > div > div > div > div.container-fluid > div > div:nth-child(2) > div.col-md-4 > div.btn_ctn_ttn2');
-        await searchElement.click();
+          const searchElement = document.querySelector('#PKGModal > div > div > div > div.container-fluid > div > div:nth-child(2) > div.col-md-4 > div.btn_ctn_ttn2');
+          await searchElement.click();
 
-        const page2Element = document.querySelector('#paginationPackageKind > div > div > ul > li:nth-child(3) > a');
-        await page2Element.click();
+          const page2Element = document.querySelector('#paginationPackageKind > div > div > ul > li:nth-child(3) > a');
+          await page2Element.click();
 
-        const choiceElement = document.querySelector('#PKGbodyModal > tr:nth-child(9)');
-        await choiceElement.click();
-      }, 1000);
+          const choiceElement = document.querySelector('#PKGbodyModal > tr:nth-child(9)');
+          await choiceElement.click();
+        }, 1000);
+        await delay(2000);
+      }
+      await delay(1000);
+
+      //MARK & DESCR.
+      const markAndDescElement = document.querySelector("#md-btn")
+      if (markAndDescElement) {
+        await markAndDescElement.click();
+
+        const markElement = document.querySelector("#mn-text");
+        markElement.value = "N/M";
+        markElement.dispatchEvent(event);
+
+        const descElement = document.querySelector("#txtDescription");
+        descElement.value = "Made in China";
+        descElement.dispatchEvent(event);
+        await delay(1000);
+
+        const saveElement = document.querySelector("#save");
+        if (saveElement) {
+          await saveElement.click();
+        }
+        await delay(2000);
+
+        const saveElement1 = document.querySelector('[onclick="onSaveEquipmentCommodityDetails()"]');
+        if (saveElement1) {
+          await saveElement1.click();
+          await delay(1000);
+  
+          const submitElement = document.querySelector('[onclick="onSubmit(\'/E-ShippingWebApp\');"]');
+          if (submitElement) {
+            await submitElement.click();
+          }
+        }
+      }
     }, 500);
   }
   // 填入数据 頁面1 (Scrape data in page 1)
